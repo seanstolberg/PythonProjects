@@ -21,7 +21,7 @@ class RemoteScriptManager:
 
     Important Assumptions:
 
-    * RemoteScriptManager using both ssh and scp and thus requires that passwordless ssh is already setup between the client
+    * RemoteScriptManager using both ssh and scp and thus requires that password-less ssh is already setup between the client
     running this tool and the remote device/machine.
 
     Scripts used:
@@ -51,6 +51,7 @@ class RemoteScriptManager:
         self.scripts_dir = this_config["script_config"]["scripts_dir"]
         self.scripts = this_config["script_config"]["scripts"]
         self.target_logs_to_save = this_config["log_config"]["target_logs_to_save"]
+        self.destination_log_dir = this_config["log_config"]["destination_log_dir"]
         self.ssh_target = f"{self.user}@{self.target}"
         self.base_script_dir_as_posix = Path.joinpath(
              Path(f"/{self.user}"), self.scripts_dir).as_posix()
@@ -65,7 +66,7 @@ class RemoteScriptManager:
         for script in self.scripts:            
             destScriptPath = f"{self.ssh_target}:{Path.joinpath(Path(self.base_script_dir_as_posix), script).as_posix()}"
             localScriptPath = Path.joinpath(
-                Path(os.getcwd()), "RemoteLinuxTool", self.scripts_dir, script)
+                Path(os.getcwd()), self.scripts_dir, script)
             print(f"Copying {localScriptPath} to destination {destScriptPath}")
             subprocess.run([self.scp_path, localScriptPath, destScriptPath])
 
@@ -82,15 +83,16 @@ class RemoteScriptManager:
             subprocess.run([self.ssh_path, self.ssh_target, command])
 
     def pull_logs_from_target(self):
-        # newpath = r'C:\Program Files\arbitrary'
-        # if not os.path.exists(newpath):
-        #     os.makedirs(newpath)
+        destinationPath = Path(self.destination_log_dir)
+        if not os.path.exists(destinationPath):
+            os.makedirs(destinationPath)
 
         for log in self.target_logs_to_save:
             print(f"Pulling logs from: {log}")
             fileName = log.split("/")[-1]
+            
             subprocess.run(
-                [self.scp_path, f"{self.ssh_target}:{log}", fileName])
+                [self.scp_path, f"{self.ssh_target}:{log}",  Path.joinpath(Path(self.destination_log_dir), fileName)])
 
     def execute(self):
         self.ensure_target_script_dir()
@@ -98,3 +100,6 @@ class RemoteScriptManager:
         self.make_scripts_executable()
         self.run_scripts()
         self.pull_logs_from_target()
+
+this_rsm = RemoteScriptManager(r"C:\Users\seans\Documents\GitHub\PythonProjects\RemoteLinuxTool\Tests\test_config.yml")
+this_rsm.execute()

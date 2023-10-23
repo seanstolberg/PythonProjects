@@ -1,6 +1,7 @@
+from pathlib import Path
 """Module providing unit test functionality for python"""
 import pytest
-from RemoteManager.RemoteScriptManager import RemoteScriptManager
+from testautomationtools.remotescriptmanager import RemoteScriptManager
 
 @pytest.fixture
 def rsm():
@@ -10,28 +11,24 @@ def rsm():
     Returns:
         _type_: _description_
     """
-    return RemoteScriptManager(r"C:\Users\seans\Documents\GitHub\PythonProjects\RemoteLinuxTool\Tests\test_config.yml")
+    test_config = str(Path.joinpath(Path(__file__).parent, "test_config.yml"))
+    return RemoteScriptManager(test_config)
 
-def test_constructor_default_values():
+def test_constructor_default_values(rsm):
     """
     _summary_
     """
-    this_rsm = RemoteScriptManager(r"C:\Users\seans\Documents\GitHub\PythonProjects\RemoteLinuxTool\Tests\test_config.yml")
-    assert isinstance(this_rsm, RemoteScriptManager)
-    # assert thisRsm.scp_path == RemoteScriptManager.defaultScpExe
-    # assert thisRsm.sshExe == RemoteScriptManager.defaultSshExe
-    # assert thisRsm.scriptsDir == RemoteScriptManager.defaultScriptsDir
-    # assert thisRsm.getResourceInfoScript == RemoteScriptManager.defaultGetResourceInfoScript
-    # assert thisRsm.log_resourceInfo == RemoteScriptManager.defaultLog_resourceInfo
-    # assert thisRsm.log_system == RemoteScriptManager.defaultLog_system
-    # assert thisRsm.logPullList == RemoteScriptManager.defaultLogPullList
-    # assert thisRsm.scp_path == RemoteScriptManager.defaultScpExe
-    # assert thisRsm.sshExe == RemoteScriptManager.defaultSshExe
-    # assert thisRsm.scriptsDir == RemoteScriptManager.defaultScriptsDir
-    # assert thisRsm.getResourceInfoScript == RemoteScriptManager.defaultGetResourceInfoScript
-    # assert thisRsm.log_resourceInfo == RemoteScriptManager.defaultLog_resourceInfo
-    # assert thisRsm.log_system == RemoteScriptManager.defaultLog_system
-    # assert thisRsm.logPullList == RemoteScriptManager.defaultLogPullList    
+    exp_user = "user1"
+    exp_target = "myTarget"
+    exp_scp_path = "myPath/scp.exe"
+    exp_ssh_path = "myPath/ssh.exe"
+    exp_scripts_dir ="scripts"
+    exp_scripts = ["GetResourceInfo.sh"]
+    exp_target_logs_to_save = ["/var/log/resourceInfoLog.txt", "/var/log/messages"]
+    exp_destination_log_dir = "logs"
+    
+    assert isinstance(rsm, RemoteScriptManager)
+    assert rsm.user == exp_user, f"Expected self.user to be {exp_user}, but was {rsm.user}"
 
 def test_constructor_null_user():
     """
@@ -39,10 +36,3 @@ def test_constructor_null_user():
     """
     with pytest.raises(ValueError):
         RemoteScriptManager(None)
-        
-def test_execute():
-    """
-    _summary_
-    """
-    this_rsm = RemoteScriptManager(r"C:\Users\seans\Documents\GitHub\PythonProjects\RemoteLinuxTool\Tests\test_config.yml")
-    this_rsm.execute()

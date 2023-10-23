@@ -1,5 +1,5 @@
 user_config:
-  user: 'root'
+  user: 'user1'
 target_config:
   target: 192.168.1.41
 ext_tool_config:
@@ -12,4 +12,5 @@ script_config:
 log_config:
   target_logs_to_save:
     - '/var/log/resourceInfoLog.txt'
-    - '/var/log/messages: true'
+    - '/var/log/messages'
+  destination_log_dir: 'logs'
