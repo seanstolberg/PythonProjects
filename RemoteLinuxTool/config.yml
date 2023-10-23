@@ -1,0 +1,15 @@
+user_config:
+  user: 'root'
+target_config:
+  target: 192.168.1.41
+ext_tool_config:
+  scp_path: 'C:\Windows\System32\OpenSSH\scp.exe'
+  ssh_path: 'C:\Windows\System32\OpenSSH\ssh.exe'
+script_config:
+  scripts_dir: 'scripts'
+  scripts:
+    - 'GetResourceInfo.sh'
+log_config:
+  target_logs_to_save:
+    - '/var/log/resourceInfoLog.txt'
+    - '/var/log/messages: true'
