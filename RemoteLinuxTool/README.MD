@@ -14,7 +14,7 @@ The class takes a `.yaml` config file in the constructor, then uses the values t
 - `RemoteScriptManager` relies on SSH and SCP, so it assumes that password-less SSH authentication is already configured between the client running this tool and the remote device.
 
 ## Configuration File Example
-Here is an example of the configuration file with all the required fields filled in:
+Here is an example of the `config.yml` file, passed to the constructor of RemoteScriptManager, with all the required fields filled in:
 
 ```yaml
 user_config:
