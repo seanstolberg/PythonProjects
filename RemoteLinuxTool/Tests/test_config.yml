@@ -1,10 +1,10 @@
 user_config:
   user: 'user1'
 target_config:
-  target: 192.168.1.41
+  target: "myTarget"
 ext_tool_config:
-  scp_path: 'C:\Windows\System32\OpenSSH\scp.exe'
-  ssh_path: 'C:\Windows\System32\OpenSSH\ssh.exe'
+  scp_path: 'myPath/scp.exe'
+  ssh_path: 'myPath/ssh.exe'
 script_config:
   scripts_dir: 'scripts'
   scripts:
