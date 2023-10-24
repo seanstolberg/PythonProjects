@@ -1,19 +1,13 @@
 # RemoteScriptManager
 
-This Python class, `RemoteScriptManager`, provides a set of methods for managing a workflow on remote Linux devices. It simplifies tasks such as copying and executing scripts on a remote device, collecting logs, and creating error summaries. The class uses SSH and SCP, assuming that password-less SSH authentication is already set up between the client and the remote device.
-
-## Author
-
 - **Author**: Sean Stolberg
 - **Date**: October 21, 2023
 
 ## Description
 
-The `RemoteScriptManager` class simplifies working with remote Linux devices by supporting the following workflow:
+This Python class, `RemoteScriptManager`, provides a set of methods for managing a workflow on remote Linux devices. It simplifies tasks such as copying and executing scripts on a remote device, and collecting logs. 
 
-1. Copy one or more test scripts to the remote Linux device.
-2. Execute the test scripts on the remote Linux device.
-3. Collect the logs created by the scripts and the system log from `/var/log/messages` after script execution.
+The class takes a `.yaml` config file in the constructor, then uses the values to copy any scripts specified to the target test device via `scp`, execute them via `ssh`, then copy any log files specified in the config back to the client machine we're running on. 
 
 ## Important Assumptions
 
@@ -38,14 +32,14 @@ log_config:
   target_logs_to_save:
     - '/var/log/resourceInfoLog.txt'
     - '/var/log/messages'
-  destination_log_dir: logs
+  destination_log_dir: 'logs'
 ```
 
 ## Example Script
 
 The class works with scripts like `GetResourceInfo.sh`, which generates a summary (snapshot in time) of memory and disk usage, along with the CPU load at the time the script was run. Here's an example output:
 
-```plaintext
+```bash
 2023-10-21 17:37:03 Memory Usage: 3208/3829MB (83.78%)
 2023-10-21 17:37:03 Disk Usage: 43G/3.8GB (/)
 2023-10-21 17:37:03 CPU Load: 0.08
@@ -58,7 +52,7 @@ The class works with scripts like `GetResourceInfo.sh`, which generates a summar
 2. Navigate to the project directory: cd RemoteScriptManager
 
 ## Usage Example
-```
+```python
 from RemoteScriptManager import RemoteScriptManager
 
 # Create a RemoteScriptManager instance with a configuration file path
@@ -76,11 +70,4 @@ rsm.execute()
 - **run_scripts(self)**: Execute script files on the remote device.
 - **pull_logs_from_target(self)**: Pull log files from the remote device to the local directory.
 - **execute(self)**: Execute the complete workflow, including directory setup, copying scripts, making them executable, running scripts, and pulling logs.
-
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-The RemoteScriptManager class is inspired by the need to manage scripts on remote Linux devices effectively.
-Feel free to contribute to or modify this class according to your specific use case or requirements.
 
