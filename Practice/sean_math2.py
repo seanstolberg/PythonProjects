@@ -14,3 +14,5 @@ def multiply(a, b):
             result += a
         a << 1 # left-shift 'a', this multiplies a by 2
         b >> 1 # right shift 'b'
+        
+print(multiply(2,3))
